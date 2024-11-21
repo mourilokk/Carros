@@ -2,11 +2,13 @@ package com.example.carros.api;
 
 import com.example.carros.domain.Carro;
 import com.example.carros.domain.CarroService;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -34,8 +36,10 @@ public class CarrosController {
     }
 
     @GetMapping("/tipo/{tipo}")
-    public Iterable<Carro> getCarroByTipo(@PathVariable("tipo") String tipo){
-        return service.getCarroByTipo(tipo);
+    public ResponseEntity getCarroByTipo(@PathVariable("tipo") String tipo){
+        List<Carro> carros = service.getCarroByTipo(tipo);
+
+        return carros.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(carros);
     }
 
     @PostMapping

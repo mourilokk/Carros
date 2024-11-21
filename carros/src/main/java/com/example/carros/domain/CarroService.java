@@ -1,11 +1,13 @@
 package com.example.carros.domain;
 
+import com.example.carros.domain.dto.CarroDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class CarroService {
@@ -13,26 +15,34 @@ public class CarroService {
     @Autowired
     private CarroRepository rep;
 
-    public Iterable<Carro> getCarros(){
-        return rep.findAll();
+    public List<CarroDTO> getCarros(){
+
+        return rep.findAll().stream().map(CarroDTO::new).collect(Collectors.toList());
+
+        // List<Carro> carros = rep.findAll();
+        // List<CarroDTO> list = carros.stream().map(c -> new CarroDTO(c)).collect(Collectors.toList());
+        // return list;
     }
 
-    public Optional<Carro> getCarroById(Long id) {
-        return rep.findById(id);
+    public Optional<CarroDTO> getCarroById(Long id) {
+        return rep.findById(id).map(CarroDTO::new);
     }
 
-    public List<Carro> getCarroByTipo(String tipo) {
-        return rep.findCarroByTipo(tipo);
+    public List<CarroDTO> getCarroByTipo(String tipo) {
+        return rep.findCarroByTipo(tipo).stream().map(CarroDTO::new).collect(Collectors.toList());
+
+        //  return rep.findCarroByTipo(tipo).stream().map(CarroDTO::new)).collect(Collectors.toList());
     }
 
-    public Carro save(Carro carro) {
-        return rep.save(carro);
+    public CarroDTO save(Carro carro) {
+        Assert.isNull(carro.getId(), "Não foi possível inserir o carro!");
+        return new CarroDTO(rep.save(carro));
     }
 
-    public Carro update(Carro carro, Long id){
+    public CarroDTO update(Carro carro, Long id){
         Assert.notNull(id, "Não foi possível atualizar o registro");
 
-        Optional<Carro> optional = getCarroById(id);
+        Optional<Carro> optional = rep.findById(id);
         if(optional.isPresent()){
             Carro db = optional.get();
 
@@ -42,18 +52,20 @@ public class CarroService {
 
             rep.save(db);
 
-            return db;
+            return new CarroDTO(rep.save(db));
         }
         else{
             throw new RuntimeException("Não foi possível atualizar o registro");
         }
     }
 
-    public void delete(Long id) {
-        Optional<Carro> optional = getCarroById(id);
+    public boolean delete(Long id) {
+        Optional<CarroDTO> optional = getCarroById(id);
         if(optional.isPresent()){
             rep.deleteById(id);
+            return true;
         }
+        return false;
     }
 
     /*

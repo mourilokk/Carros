@@ -4,8 +4,16 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import lombok.*;
 
 @Entity
+@Data
+/*
+@Getter @Setter
+@EqualsAndHashCode
+@NoArgsConstructor
+@AllArgsConstructor
+ */
 public class Carro {
 
     @Id
@@ -15,7 +23,7 @@ public class Carro {
     private String nome;
 
     private String tipo;
-
+/*
     public Carro(){
     }
 
@@ -48,4 +56,5 @@ public class Carro {
     public void setTipo(String tipo) {
         this.tipo = tipo;
     }
+    */
 }

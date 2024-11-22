@@ -1,5 +1,6 @@
 package com.example.carros;
 
+import com.example.carros.api.exception.ObjectNotFoundException;
 import com.example.carros.domain.Carro;
 import com.example.carros.domain.CarroService;
 import com.example.carros.domain.dto.CarroDTO;
@@ -32,18 +33,21 @@ class CarrosApplicationTests {
 		assertNotNull(id);
 
 		//Buscar o objeto
-		Optional<CarroDTO> op = service.getCarroById(id);
-		assertTrue(op.isPresent());
+		c = service.getCarroById(id);
+		assertNotNull(c);
 
-		c = op.get();
 		assertEquals("Ferrari", c.getNome());
 		assertEquals("esportivos", c.getTipo());
 
 		//Deletar o objeto
 		service.delete(id);
 		//Verificar o objeto
-		assertFalse(service.getCarroById(id).isPresent());
+		try {
+			assertNull(service.getCarroById(id));
+			fail("Carro não foi excluído");
+		}catch(ObjectNotFoundException e){
 
+		}
 
 
 	}
@@ -56,9 +60,8 @@ class CarrosApplicationTests {
 
 	@Test
 	public void testGet(){
-		Optional<CarroDTO> op = service.getCarroById(11L);
-		assertTrue(op.isPresent());
-		CarroDTO c = op.get();
+		CarroDTO c = service.getCarroById(11L);
+		assertNotNull(c);
 		assertEquals("Ferrari FF", c.getNome());
 	}
 

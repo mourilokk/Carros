@@ -27,7 +27,7 @@ public class CarroService {
 
     public CarroDTO getCarroById(Long id) {
         Optional<Carro> carro = rep.findById(id);
-        return carro.map(CarroDTO::create).orElseThrow(() -> new ObjectNotFoundException("Carro não encontrado");
+        return carro.map(CarroDTO::create).orElseThrow(() -> new ObjectNotFoundException("Carro não encontrado"));
     }
 
     public List<CarroDTO> getCarroByTipo(String tipo) {
@@ -64,7 +64,6 @@ public class CarroService {
     public void delete(Long id) {
         rep.deleteById(id);
     }
-}
 
 
     /*

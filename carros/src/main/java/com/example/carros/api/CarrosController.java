@@ -6,6 +6,7 @@ import com.example.carros.domain.dto.CarroDTO;
 import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -40,6 +41,7 @@ public class CarrosController {
         return carros.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(carros);
     }
 
+    @Secured({"ROLE_ADMIN"})
     @PostMapping
     public ResponseEntity post(@RequestBody Carro carro){
             CarroDTO c = service.save(carro);
